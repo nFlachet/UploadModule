@@ -1,0 +1,6 @@
+.idea
+*.pyc
+*.log
+*.crt
+*.key
+*.csv
