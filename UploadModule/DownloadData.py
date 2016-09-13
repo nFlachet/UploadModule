@@ -26,6 +26,5 @@ class DownloadModule(am.AbstractModule):
             f.write('Variant_ID;' + self._variantID + ';\n')
             f.write('Type;' + type + ';\n')
 
-        #write case, variant, type ?
         if not self._pdm.copy_to_csv_file(filename, schema_table):
             self._status += "Failed - can't save table \n".format(table_name)

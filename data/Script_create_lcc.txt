@@ -1,0 +1,22 @@
+CREATE TABLE trout_57b428a6cef25a0a0d6681ac.LCC
+(
+	DiscountRateExclInflation double precision,
+	ElectricityPriceIncrease double precision,
+	DistrictHeatingPriceIncrease double precision,
+	energy_price_increase_district_heating_natural_gas double precision,
+	energy_price_increase_other_fuel double precision,
+	feed_in_tariff_price_increase double precision,
+	LCACalcPeriod double precision,
+	rent_increase double precision,
+	feed_in_tariff_price double precision,
+	ElectricityPrice double precision,
+	natural_gas_price double precision,
+	DistrictHeatingPrice double precision,
+	other_fule_price double precision,
+	rent_incomes double precision
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trout_57b428a6cef25a0a0d6681ac.building
+  OWNER TO postgres;

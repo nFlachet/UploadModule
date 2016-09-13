@@ -45,7 +45,8 @@ class UploadModule(am.AbstractModule):
         logging.info(self._json_dict)
 
     def _create_feature_if_necessary(self, feature_id):
-        req = self._create_schema_request("""INSERT INTO {} (object_id) VALUES ('{}'); """.format(self._gml_table, feature_id))
+        key_id = self._gml_table.lower() + '_id'
+        req = self._create_schema_request("""INSERT INTO {} ({}}) VALUES ('{}'); """.format(self._gml_table, key_id, feature_id))
         logging.debug(req)
         self._pdm.execute_request(req)
         self._pdm.commit_transactions()

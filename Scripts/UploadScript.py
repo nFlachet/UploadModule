@@ -10,12 +10,13 @@ def main(argv=None):
     logging.basicConfig(filename='UploadModule.log', level=logging.DEBUG)
     logging.FileHandler('UploadModule.log', mode='w')
 
-    host = ''
-    db_name = ''
-    user = ''
-    password = ''
-    port = ''
-    filename = ''
+    host = '10.9.10.183'
+    db_name = 'Warsaw'
+    user = 'tournaire'
+    password = 'olivier'
+    port = '5432'
+
+    filename = '../data/bldgs.csv'
 
     try:
         logging.info("currents args are: {}".format(sys.argv[1:]))
