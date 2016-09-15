@@ -5,7 +5,7 @@ setup(name='UploadModule',
       packages=['UploadModule'],
       entry_points={
           'console_scripts': [
-              'UploadModule = UploadModule.__main__:main'
+              'UploadModule = FileHandlerService.UploadForm.__main__:main'
           ]
       },
       )

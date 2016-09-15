@@ -12,8 +12,12 @@ class UploadModule(am.AbstractModule):
         self._gml_table = ''
         self._json_dict = {}
 
-    def upload_data(self, filename):
-        self._load_json_data(filename)
+    def upload_data(self, file, extension):
+        if extension.upper() == ".JSON":
+                self._json_dict = file
+        elif extension.upper() == ".CSV":
+             self._json_dict = CsvLoader.loadAsJson(file)
+
         if not self._json_dict:
             self._status += "Can't convert data into right json format"
         else:
@@ -32,32 +36,23 @@ class UploadModule(am.AbstractModule):
             return False
         return True
 
-    def _load_json_data(self, fileURL):
-        file_name, file_extension = os.path.splitext(fileURL)
-        if file_extension.upper() == ".JSON":
-            with open(fileURL, "r") as file_data:
-                self._json_dict = json.load(file_data)
-        elif file_extension.upper() == ".CSV":
-             self._json_dict = CsvLoader.loadAsJson(fileURL)
-
     def print_json(self):
         print self._json_dict
         logging.info(self._json_dict)
 
-    def _create_feature_if_necessary(self, feature_id):
-        key_id = self._gml_table.lower() + '_id'
-        req = self._create_schema_request("""INSERT INTO {} ({}}) VALUES ('{}'); """.format(self._gml_table, key_id, feature_id))
+    def _create_feature_if_necessary(self, feature_id, key_id):
+        req = self._create_schema_request("""INSERT INTO {} ({}) VALUES ('{}'); """.format(self._gml_table, key_id, feature_id))
         logging.debug(req)
         self._pdm.execute_request(req)
         self._pdm.commit_transactions()
 
-    def _create_insert_feature_request(self, properties, feature_id):
-        self._create_feature_if_necessary(feature_id)
-        if not self._update_feature(feature_id, properties):
+    def _create_insert_feature_request(self, properties, feature_id, key_id):
+        self._create_feature_if_necessary(feature_id, key_id)
+        if not self._update_feature(feature_id, properties, key_id):
             return False
         return True
 
-    def _update_feature(self, gml_id, properties):
+    def _update_feature(self, gml_id, properties, key_id):
         req = "UPDATE {} SET ".format(self._gml_table)
         firstPass = True
         for property_key, property_value in properties.iteritems():
@@ -70,7 +65,7 @@ class UploadModule(am.AbstractModule):
 
                 req += "{}='{}'".format(property_key, property_value.replace(',','.'))
 
-        req += " WHERE object_ID='{}';".format(gml_id)
+        req += " WHERE {}='{}';".format(key_id, gml_id)
         embedded_req = self._create_schema_request(req)
 
         logging.debug(embedded_req)
@@ -113,19 +108,20 @@ class UploadModule(am.AbstractModule):
                 self._status += "Failed - At least one feature has no properties (at least object_id is mandatory)"
                 return False
 
+            key_id = self._gml_table.lower() + '_id'
             feature_id = properties.get('object_ID', None)
             if not feature_id:
                 self._status = "Failed - no object_ID"
                 return False
 
-            if not self._create_insert_feature_request(properties, feature_id):
+            if not self._create_insert_feature_request(properties, feature_id, key_id):
                 self._status = "Failed - can't update feature"
                 self._pdm.rollback_transactions()
                 return False
 
             geometry = feature.get('geometry', None)
             if geometry is not None:
-                if not self._update_feature_geometry( json.dumps(geometry), feature_id):
+                if not self._update_feature_geometry( json.dumps(geometry), feature_id, key_id):
                     self._status = "Failed - can't upload geometry"
                     self._pdm.rollback_transactions()
                     return False
@@ -135,9 +131,9 @@ class UploadModule(am.AbstractModule):
         self._status = "Success"
         return True
 
-    def _update_feature_geometry(self, geometry, feature_id):
-        based_req = """UPDATE {}.{} SET lod0footprint=( ST_AsText(ST_GeomFromGeoJSON('{}') ) ) WHERE object_ID='{}';"""\
-            .format(self._schemaID, self._gml_table, geometry, feature_id)
+    def _update_feature_geometry(self, geometry, feature_id, key_id):
+        based_req = """UPDATE {}.{} SET lod0footprint=( ST_AsText(ST_GeomFromGeoJSON('{}') ) ) WHERE {}='{}';"""\
+            .format(self._schemaID, self._gml_table, geometry, key_id, feature_id)
 
         geom_req = """ SET SCHEMA 'public';  {}""".format(based_req)
 
