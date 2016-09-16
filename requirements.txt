@@ -3,7 +3,7 @@ certifi==2016.8.31
 future==0.15.2
 pefile==2016.3.28
 psycopg2==2.6.2
-pypiwin32==219
+# pypiwin32==219
 singledispatch==3.4.0.3
 six==1.10.0
 tornado==4.4.1
