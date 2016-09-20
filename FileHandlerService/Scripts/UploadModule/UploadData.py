@@ -13,8 +13,8 @@ class UploadModule(am.AbstractModule):
         self._json_dict = {}
 
     def upload_data(self, file, extension):
-        if extension.upper() == ".JSON":
-                self._json_dict = file
+        if extension.upper() == ".JSON" or extension.upper() == ".GEOJSON":
+            self._json_dict = json.loads(file)
         elif extension.upper() == ".CSV":
              self._json_dict = CsvLoader.loadAsJson(file)
 
@@ -65,13 +65,14 @@ class UploadModule(am.AbstractModule):
 
                 req += "{}='{}'".format(property_key, property_value.replace(',','.'))
 
-        req += " WHERE {}='{}';".format(key_id, gml_id)
-        embedded_req = self._create_schema_request(req)
+        if not firstPass:
+            req += " WHERE {}='{}';".format(key_id, gml_id)
+            embedded_req = self._create_schema_request(req)
 
-        logging.debug(embedded_req)
-        if not self._pdm.execute_request(embedded_req):
-            self._status = "Failed - can't update element"
-            return False
+            logging.debug(embedded_req)
+            if not self._pdm.execute_request(embedded_req):
+                self._status = "Failed - can't update element"
+                return False
 
         return True
 
