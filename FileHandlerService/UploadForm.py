@@ -24,6 +24,7 @@ class Upload(tornado.web.RequestHandler):
         UploadScript(fileinfo['body'], extn)
 
         print "finished upload"
+        self.render("fileuploadform.html")
 
 
 # application = tornado.web.Application([
