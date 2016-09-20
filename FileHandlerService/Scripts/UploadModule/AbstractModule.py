@@ -1,4 +1,4 @@
-import UploadModule.DataManager as DataManager
+import DataManager as DataManager
 
 
 class AbstractModule:

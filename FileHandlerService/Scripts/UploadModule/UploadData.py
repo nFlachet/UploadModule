@@ -2,7 +2,7 @@ import json
 import os
 import logging
 
-import UploadModule.AbstractModule as am
+import AbstractModule as am
 import CsvLoader
 
 
