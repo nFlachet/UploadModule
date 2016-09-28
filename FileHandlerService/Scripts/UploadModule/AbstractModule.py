@@ -11,7 +11,7 @@ class AbstractModule:
         self._caseID = ''
         self._variantID = ''
         self._valid_srs_list = ['urn:ogc:def:crs:OGC:1.3:CRS84']
-        self._valid_gml_type = {'BUILDINGS':'building', 'DISTRICT':'district' }
+        self._valid_gml_type = {'BUILDINGS':'building', 'DISTRICT':'district', 'SPACES':'space' }
 
     def _create_schema_request(self, request):
         return """  SET SCHEMA '{}';
