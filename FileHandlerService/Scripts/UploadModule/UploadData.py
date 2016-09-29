@@ -57,7 +57,7 @@ class UploadModule(am.AbstractModule):
         firstPass = True
         for property_key, property_value in properties.iteritems():
             # todo check conversion properly
-            if property_key != 'object_ID' and property_value is not '':
+            if property_key != 'objectID' and property_value is not '':
                 if not firstPass:
                     req += ", "
                 else:
@@ -106,13 +106,13 @@ class UploadModule(am.AbstractModule):
         for feature in features_list:
             properties = feature.get('properties', None)
             if properties is None:
-                self._status += "Failed - At least one feature has no properties (at least object_id is mandatory)"
+                self._status += "Failed - At least one feature has no properties (at least objectID is mandatory)"
                 return False
 
             key_id = self._gml_table.lower() + '_id'
-            feature_id = properties.get('object_ID', None)
+            feature_id = properties.get('objectID', None)
             if not feature_id:
-                self._status = "Failed - no object_ID"
+                self._status = "Failed - no objectID"
                 return False
 
             if not self._create_insert_feature_request(properties, feature_id, key_id):
