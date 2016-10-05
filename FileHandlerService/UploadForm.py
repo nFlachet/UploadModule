@@ -8,12 +8,18 @@ from Scripts.UploadScript import UploadScript
 from tornado.options import define, options
 
 
-class Userform(tornado.web.RequestHandler):
+class Upload(tornado.web.RequestHandler):
+    def initialize(self, database):
+        self.database = database
+
     def get(self):
+        (case_id, variant_id, user_id) = self.get_argument("session").split("$")
+        self.database['case_id'] = case_id
+        self.database['variant_id'] = case_id
+        self.database['user_id'] = case_id
+
         self.render("fileuploadform.html")
 
-
-class Upload(tornado.web.RequestHandler):
     def post(self):
         fileinfo = self.request.files['filearg'][0]
         print "file name is", fileinfo['filename']
@@ -21,9 +27,8 @@ class Upload(tornado.web.RequestHandler):
         fname = fileinfo['filename']
         extn = os.path.splitext(fname)[1]
 
-        UploadScript(fileinfo['body'], extn)
+        UploadScript(fileinfo['body'], extn, self.database['case_id'], self.database['variant_id'])
 
-        print "finished upload"
         self.render("fileuploadform.html")
 
 
@@ -40,11 +45,10 @@ class Upload(tornado.web.RequestHandler):
 
 define("port", default=8888, help="run on the given port", type=int)
 
-
 def main():
+    mydatabase = dict()
     application = tornado.web.Application([
-        (r"/", Userform),
-        (r"/upload", Upload),
+        (r"/", Upload, dict(database=mydatabase)),
     ], debug=False)
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)

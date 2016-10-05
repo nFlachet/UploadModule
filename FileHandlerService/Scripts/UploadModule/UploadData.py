@@ -7,8 +7,9 @@ import CsvLoader
 
 
 class UploadModule(am.AbstractModule):
-    def __init__(self, host, db_name, user, pwd, port):
+    def __init__(self, host, db_name, user, pwd, port, case_id, variant_id):
         am.AbstractModule.__init__(self, host, db_name, user, pwd, port)
+        self.set_schema_id(case_id, variant_id)
         self._gml_table = ''
         self._json_dict = {}
 
@@ -28,9 +29,6 @@ class UploadModule(am.AbstractModule):
         return self._status
 
     def _check_case_variant(self):
-        case_id = self._json_dict.get('caseId', '')
-        variant_id = self._json_dict.get('variantId', 'null')
-        self.set_schema_id(case_id, variant_id)
         if not self._pdm.check_if_schema_exists(self._schemaID):
             self._status += "Failed - schema for case and variant doesn't exist"
             return False

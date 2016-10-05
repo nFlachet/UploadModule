@@ -18,7 +18,7 @@ class AbstractModule:
                     {}""".format(self._schemaID, request)
 
     def set_schema_id(self, case_id, variant_id):
-        base_schema_id = case_id if variant_id is '' or variant_id is None or variant_id is 'null' else case_id + "_" + variant_id
+        base_schema_id = case_id if variant_id is '' or variant_id is None or variant_id is 'null' or variant_id is "undefined" else case_id + "_" + variant_id
         self._caseID = case_id
         self._variantID = variant_id
         self._schemaID = self._prefix + base_schema_id
