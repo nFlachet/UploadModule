@@ -7,21 +7,20 @@ import logging
 
 class UploadScript:
     def __init__(self, file, extension, case_id, variant_id):
-
         logging.basicConfig(filename='UploadModule.log', level=logging.DEBUG)
         logging.FileHandler('UploadModule.log', mode='w')
 
-        # host = '10.9.10.183'
-        # db_name = 'Warsaw'
-        # user = 'tournaire'
-        # password = 'olivier'
-        # port = '5432'
-
-        host = 'vps17642.public.cloudvps.com'
+        host = '10.9.10.183'
         db_name = 'Warsaw'
-        user = 'postgres'
-        password = 'x0mxaJc69J9KAlFNsaDt'
-        port = '5443'
+        user = 'tournaire'
+        password = 'olivier'
+        port = '5432'
+
+        #host = 'vps17642.public.cloudvps.com'
+        #db_name = 'Warsaw'
+        #user = 'postgres'
+        #password = 'x0mxaJc69J9KAlFNsaDt'
+        #port = '5443'
 
         try:
             logging.info("currents args are: {}".format(sys.argv[1:]))
@@ -47,5 +46,8 @@ class UploadScript:
         logging.info("Starting UploadModule.")
 
         uploader = UploadData.UploadModule(host, db_name, user, password, port, case_id, variant_id)
-        uploader.upload_data(file, extension)
+        self._status = uploader.upload_data(file, extension)
         logging.info('finished')
+
+    def getStatus(self):
+        return self._status

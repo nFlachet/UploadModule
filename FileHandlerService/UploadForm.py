@@ -15,10 +15,12 @@ class Upload(tornado.web.RequestHandler):
     def get(self):
         (case_id, variant_id, user_id) = self.get_argument("session").split("$")
         self.database['case_id'] = case_id
-        self.database['variant_id'] = case_id
-        self.database['user_id'] = case_id
-
-        self.render("fileuploadform.html")
+        if variant_id == 'undefined':
+            self.database['variant_id'] = None
+        else:
+            self.database['variant_id'] = variant_id
+        self.database['user_id'] = user_id
+        self.render("fileuploadform.html", statusText="")
 
     def post(self):
         fileinfo = self.request.files['filearg'][0]
@@ -27,9 +29,10 @@ class Upload(tornado.web.RequestHandler):
         fname = fileinfo['filename']
         extn = os.path.splitext(fname)[1]
 
-        UploadScript(fileinfo['body'], extn, self.database['case_id'], self.database['variant_id'])
+        UploaderScript = UploadScript(fileinfo['body'], extn, self.database['case_id'], self.database['variant_id'])
 
-        self.render("fileuploadform.html")
+        self.render("fileuploadform.html", statusText=UploaderScript.getStatus())
+
 
 
 # application = tornado.web.Application([
