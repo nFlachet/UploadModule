@@ -1,0 +1,46 @@
+CREATE TABLE trout_57b428a6cef25a0a0d6681ac.district
+(
+	district_id text NOT NULL,
+	MaxCostShare	double precision,
+	DiscountRateExclInflation	double precision,
+	ElectricityPriceIncrease	double precision,
+	DistrictHeatingPriceIncrease	double precision,
+	EnergyPriceIncreaseDistrictHeatingNaturalGas	double precision,
+	EnergyPriceIncreaseOtherFuel	double precision,
+	FeedInTariffPriceIncrease	double precision,
+	LCACalcPeriod	double precision,
+	RentIncrease	double precision,
+	FeedInTariffPrice	double precision,
+	ElectricityPrice	double precision,
+	NaturalGasPrice	double precision,
+	DistrictHeatingPrice	double precision,
+	OtherFuelPrice	double precision,
+	GreenTotArea	double precision,
+	GreenSealedSurfaceArea	double precision,
+	GreenPartSealedSurfaceArea	double precision,
+	GreenSemiOpenSurfaceArea	double precision,
+	GreenVegetationLT80Area	double precision,
+	GreenVegetationGT80Area	double precision,
+	GreenVergetationToSoilArea	double precision,
+	GreenRainWaterInfArea	double precision,
+	GreenVerticalArea	double precision,
+	GreenRoofTopArea	double precision,
+	TotalGas	double precision,
+	TotalElec	double precision,
+	Produced	double precision,
+	PrimaryEnergyConsumptions	double precision,
+	FinalEnergyConsumptions	double precision,
+	HeatingGas	double precision,
+	HeatingElec	double precision,
+	CoolingElec	double precision,
+	DHWElec	double precision,
+	OtherElec	double precision,
+	ProducedElec	double precision,
+	RatioEnR	double precision,
+	CONSTRAINT district_id_pkey PRIMARY KEY (district_id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trout_57b428a6cef25a0a0d6681ac.district
+  OWNER TO postgres;

@@ -1,0 +1,16 @@
+CREATE TABLE trout_56cd5745317e88872c28ec12.space
+(
+	space_id text NOT NULL,
+	Type text,
+	ZipCode integer,
+	Zone text,
+	Function text,
+	Permeability text,
+	Accessibility text,	
+	CONSTRAINT space_id_pkey PRIMARY KEY (space_id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trout_56cd5745317e88872c28ec12.space
+  OWNER TO postgres;
